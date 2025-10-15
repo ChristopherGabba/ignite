@@ -4,15 +4,13 @@
 import { Platform } from "react-native"
 import { FontSource, useFonts } from "expo-font"
 
-export const FONT_FILES: Record<string, string> = {
-  SpaceGrotesk_300Light: require("../../assets/fonts/SpaceGrotesk-300Light.ttf"),
-  SpaceGrotesk_400Regular: require("../../assets/fonts/SpaceGrotesk-400Regular.ttf"),
-  SpaceGrotesk_500Medium: require("../../assets/fonts/SpaceGrotesk-500Medium.ttf"),
-  SpaceGrotesk_600SemiBold: require("../../assets/fonts/SpaceGrotesk-600SemiBold.ttf"),
-  SpaceGrotesk_700Bold: require("../../assets/fonts/SpaceGrotesk-700Bold.ttf"),
+export const customFontsToLoad: Record<string, FontSource> = {
+  SpaceGrotesk_300Light: require("../../assets/fonts/SpaceGrotesk_300Light.ttf"),
+  SpaceGrotesk_400Regular: require("../../assets/fonts/SpaceGrotesk_400Regular.ttf"),
+  SpaceGrotesk_500Medium: require("../../assets/fonts/SpaceGrotesk_500Medium.ttf"),
+  SpaceGrotesk_600SemiBold: require("../../assets/fonts/SpaceGrotesk_600SemiBold.ttf"),
+  SpaceGrotesk_700Bold: require("../../assets/fonts/SpaceGrotesk_700Bold.ttf"),
 }
-
-export const customFontsToLoad = FONT_FILES as Record<string, FontSource>
 
 /**
  * On iOS and Android, the fonts are embedded as part of the app binary
@@ -24,9 +22,9 @@ export const customFontsToLoad = FONT_FILES as Record<string, FontSource>
  * For more info: https://docs.expo.dev/versions/latest/sdk/font/
  */
 export const useCustomFonts = (): [boolean, Error | null] => {
+  const [areFontsLoaded, fontError] = useFonts(customFontsToLoad)
   if (Platform.OS === "web") {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    return useFonts(customFontsToLoad)
+    return [areFontsLoaded, fontError]
   }
 
   // On native, fonts are precompiled and ready
@@ -35,31 +33,11 @@ export const useCustomFonts = (): [boolean, Error | null] => {
 
 const fonts = {
   spaceGrotesk: {
-    light: Platform.select({
-      ios: "SpaceGrotesk-Light",
-      android: "SpaceGrotesk-300Light",
-      web: "SpaceGrotesk_300Light",
-    }),
-    normal: Platform.select({
-      ios: "SpaceGrotesk-Regular",
-      android: "SpaceGrotesk-400Regular",
-      web: "SpaceGrotesk_400Regular",
-    }),
-    medium: Platform.select({
-      ios: "SpaceGrotesk-Medium",
-      android: "SpaceGrotesk-500Medium",
-      web: "SpaceGrotesk_500Medium",
-    }),
-    semiBold: Platform.select({
-      ios: "SpaceGrotesk-SemiBold",
-      android: "SpaceGrotesk-600SemiBold",
-      web: "SpaceGrotesk_600SemiBold",
-    }),
-    bold: Platform.select({
-      ios: "SpaceGrotesk-Bold",
-      android: "SpaceGrotesk-700Bold",
-      web: "SpaceGrotesk_700Bold",
-    }),
+    light: "SpaceGrotesk_300Light",
+    normal: "SpaceGrotesk_400Regular",
+    medium: "SpaceGrotesk_500Medium",
+    semiBold: "SpaceGrotesk_600SemiBold",
+    bold: "SpaceGrotesk_700Bold",
   },
   helveticaNeue: {
     // iOS only font.
