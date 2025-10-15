@@ -1,4 +1,20 @@
 import { ExpoConfig, ConfigContext } from "@expo/config"
+import fs from "fs"
+import path from "path"
+
+/**
+ * Automatically discover all .ttf fonts under app/assets/fonts
+ * so we never have to hardcode them.
+ */
+function getFontFiles(): string[] {
+  const fontsDir = path.resolve(__dirname, "app/assets/fonts")
+  if (!fs.existsSync(fontsDir)) return []
+
+  return fs
+    .readdirSync(fontsDir)
+    .filter((file) => file.endsWith(".ttf"))
+    .map((file) => `./app/assets/fonts/${file}`)
+}
 
 /**
  * Use ts-node here so we can use TypeScript for our Config Plugins
@@ -14,9 +30,10 @@ require("ts-node/register")
  */
 module.exports = ({ config }: ConfigContext): Partial<ExpoConfig> => {
   const existingPlugins = config.plugins ?? []
-
+  const fonts = getFontFiles()
   return {
     ...config,
+
     ios: {
       ...config.ios,
       // This privacyManifests is to get you started.
@@ -34,6 +51,15 @@ module.exports = ({ config }: ConfigContext): Partial<ExpoConfig> => {
         ],
       },
     },
-    plugins: [...existingPlugins, require("./plugins/withSplashScreen").withSplashScreen],
+    plugins: [
+      ...existingPlugins,
+      [
+        "expo-font",
+        {
+          fonts,
+        },
+      ],
+      require("./plugins/withSplashScreen").withSplashScreen,
+    ],
   }
 }

@@ -36,18 +36,6 @@
   "plugins": [
     "expo-localization",
     [
-      "expo-font",
-      {
-        "fonts": [
-          "./assets/fonts/SpaceGrotesk-300Light.ttf",
-          "./assets/fonts/SpaceGrotesk-400Regular.ttf",
-          "./assets/fonts/SpaceGrotesk-500Medium.ttf",
-          "./assets/fonts/SpaceGrotesk-600SemiBold.ttf",
-          "./assets/fonts/SpaceGrotesk-700Bold.ttf"
-        ]
-      }
-    ],
-    [
       "expo-splash-screen",
       {
         "image": "./assets/images/app-icon-android-adaptive-foreground.png",

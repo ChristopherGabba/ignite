@@ -19,18 +19,15 @@ if (__DEV__) {
 import "./utils/gestureHandler"
 
 import { useEffect, useState } from "react"
-import { Platform } from "react-native"
-import { useFonts } from "expo-font"
 import * as Linking from "expo-linking"
 import { KeyboardProvider } from "react-native-keyboard-controller"
 import { initialWindowMetrics, SafeAreaProvider } from "react-native-safe-area-context"
-
 import { AuthProvider } from "./context/AuthContext" // @demo remove-current-line
 import { initI18n } from "./i18n"
 import { AppNavigator } from "./navigators/AppNavigator"
 import { useNavigationPersistence } from "./navigators/navigationUtilities"
 import { ThemeProvider } from "./theme/context"
-import { customFontsToLoadWebOnly } from "./theme/typography"
+import { useCustomFonts } from "./theme/typography"
 import { loadDateFnsLocale } from "./utils/formatDate"
 import * as storage from "./utils/storage"
 
@@ -69,11 +66,7 @@ export function App() {
     isRestored: isNavigationStateRestored,
   } = useNavigationPersistence(storage, NAVIGATION_PERSISTENCE_KEY)
 
-  // We load fonts dynamically for web only, the rest are handled by
-  // the expo-font config plugin in `app.json`. If not using web,
-  // you can delete this permissive check along with associated
-  // code in `typography'.
-  const [areFontsLoadedWebOnly, fontLoadErrorWebOnly] = useFonts(customFontsToLoadWebOnly)
+  const [areFontsLoaded, fontLoadError] = useCustomFonts()
   const [isI18nInitialized, setIsI18nInitialized] = useState(false)
 
   useEffect(() => {
@@ -88,11 +81,7 @@ export function App() {
   // In iOS: application:didFinishLaunchingWithOptions:
   // In Android: https://stackoverflow.com/a/45838109/204044
   // You can replace with your own loading component if you wish.
-  if (
-    !isNavigationStateRestored ||
-    !isI18nInitialized ||
-    (!areFontsLoadedWebOnly && !fontLoadErrorWebOnly && Platform.OS === "web")
-  ) {
+  if (!isNavigationStateRestored || !isI18nInitialized || !areFontsLoaded || fontLoadError) {
     return null
   }
 

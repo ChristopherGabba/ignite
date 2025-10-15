@@ -2,56 +2,63 @@
 // markdown file and add links from here
 
 import { Platform } from "react-native"
-import type { FontSource } from "expo-font"
-import {
-  SpaceGrotesk_300Light as spaceGroteskLight,
-  SpaceGrotesk_400Regular as spaceGroteskRegular,
-  SpaceGrotesk_500Medium as spaceGroteskMedium,
-  SpaceGrotesk_600SemiBold as spaceGroteskSemiBold,
-  SpaceGrotesk_700Bold as spaceGroteskBold,
-} from "@expo-google-fonts/space-grotesk"
+import { FontSource, useFonts } from "expo-font"
 
-export const customFontsToLoadWebOnly =
-  Platform.OS === "web"
-    ? {
-        spaceGroteskLight,
-        spaceGroteskRegular,
-        spaceGroteskMedium,
-        spaceGroteskSemiBold,
-        spaceGroteskBold,
-      }
-    : ({} as Record<string, FontSource>)
+export const FONT_FILES: Record<string, string> = {
+  SpaceGrotesk_300Light: require("../../assets/fonts/SpaceGrotesk-300Light.ttf"),
+  SpaceGrotesk_400Regular: require("../../assets/fonts/SpaceGrotesk-400Regular.ttf"),
+  SpaceGrotesk_500Medium: require("../../assets/fonts/SpaceGrotesk-500Medium.ttf"),
+  SpaceGrotesk_600SemiBold: require("../../assets/fonts/SpaceGrotesk-600SemiBold.ttf"),
+  SpaceGrotesk_700Bold: require("../../assets/fonts/SpaceGrotesk-700Bold.ttf"),
+}
+
+export const customFontsToLoad = FONT_FILES as Record<string, FontSource>
+
+/**
+ * On iOS and Android, the fonts are embedded as part of the app binary
+ * using the expo config plugin in `app.json`. See the project
+ * [`app.json`](../../app.json) for the expo-fonts configuration. The assets
+ * are added via the `app/assets/fonts` folder. This config plugin
+ * does NOT work for web, so we have to dynamically load the fonts via this hook.
+ *
+ * For more info: https://docs.expo.dev/versions/latest/sdk/font/
+ */
+export const useCustomFonts = (): [boolean, Error | null] => {
+  if (Platform.OS === "web") {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    return useFonts(customFontsToLoad)
+  }
+
+  // On native, fonts are precompiled and ready
+  return [true, null]
+}
 
 const fonts = {
   spaceGrotesk: {
-    // The way expo-fonts config plugin applies
-    // fonts to the individual platforms, the names come out different
-    // on ios and android. For web, we have to load fonts asynchronously
-    // using useFonts.
     light: Platform.select({
       ios: "SpaceGrotesk-Light",
       android: "SpaceGrotesk-300Light",
-      web: "spaceGroteskLight",
+      web: "SpaceGrotesk_300Light",
     }),
     normal: Platform.select({
       ios: "SpaceGrotesk-Regular",
       android: "SpaceGrotesk-400Regular",
-      web: "spaceGroteskRegular",
+      web: "SpaceGrotesk_400Regular",
     }),
     medium: Platform.select({
       ios: "SpaceGrotesk-Medium",
       android: "SpaceGrotesk-500Medium",
-      web: "spaceGroteskMedium",
+      web: "SpaceGrotesk_500Medium",
     }),
     semiBold: Platform.select({
       ios: "SpaceGrotesk-SemiBold",
       android: "SpaceGrotesk-600SemiBold",
-      web: "spaceGroteskSemiBold",
+      web: "SpaceGrotesk_600SemiBold",
     }),
     bold: Platform.select({
       ios: "SpaceGrotesk-Bold",
       android: "SpaceGrotesk-700Bold",
-      web: "spaceGroteskBold",
+      web: "SpaceGrotesk_700Bold",
     }),
   },
   helveticaNeue: {
