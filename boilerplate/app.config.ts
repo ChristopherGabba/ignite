@@ -17,10 +17,12 @@ function getFontFiles(): string[] {
 }
 
 /**
- * Use ts-node here so we can use TypeScript for our Config Plugins
- * and not have to compile them to JavaScript
+ * Use tsx/cjs here so we can use TypeScript for our Config Plugins
+ * and not have to compile them to JavaScript.
+ * 
+ * See https://docs.expo.dev/config-plugins/plugins/#add-typescript-support-and-convert-to-dynamic-app-config
  */
-require("ts-node/register")
+import "tsx/cjs"
 
 /**
  * @param config ExpoConfig coming from the static config app.json if it exists
@@ -59,7 +61,6 @@ module.exports = ({ config }: ConfigContext): Partial<ExpoConfig> => {
           fonts,
         },
       ],
-      require("./plugins/withSplashScreen").withSplashScreen,
     ],
   }
 }
