@@ -63,7 +63,6 @@ module.exports = ({ config }: ConfigContext): Partial<ExpoConfig> => {
           fonts: fontPaths,
         },
       ],
-      require("./plugins/withSplashScreen").withSplashScreen,
     ],
   }
 }
