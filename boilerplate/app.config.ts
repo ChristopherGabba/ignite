@@ -8,11 +8,13 @@ import path from "path"
  */
 function getFontPathsFromAssetsFolder(): string[] {
   const fontsDir = path.resolve(__dirname, "assets/fonts")
-  if (!fs.existsSync(fontsDir)) return []
+  if (!fs.existsSync(fontsDir)) {
+    console.warn("FONT_WARNING: No custom fonts detected.")
+    return []
+  }
 
   return fs
     .readdirSync(fontsDir)
-    .filter((file) => file.endsWith(".ttf"))
     .map((file) => `./assets/fonts/${file}`)
 }
 
@@ -36,7 +38,6 @@ module.exports = ({ config }: ConfigContext): Partial<ExpoConfig> => {
 
   return {
     ...config,
-
     ios: {
       ...config.ios,
       // This privacyManifests is to get you started.

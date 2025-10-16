@@ -4,21 +4,29 @@
 import { Platform } from "react-native"
 import { FontSource, useFonts } from "expo-font"
 
+/**
+ * The naming here is important. Most font files come with
+ * a name like `SpaceGrotesk_300Light`, but iOS uses the font PostScript
+ * name (in this case `SpaceGrotesk-Light`). To keep the imports the
+ * same on both platforms use the PostScript name.
+ *
+ * For more info: https://docs.expo.dev/develop/user-interface/fonts/#how-to-determine-which-font-family-name-to-use
+ */
 export const customFontsToLoad: Record<string, FontSource> =
   Platform.OS === "web"
     ? {
-        SpaceGrotesk_300Light: require("../../assets/fonts/SpaceGrotesk_300Light.ttf"),
-        SpaceGrotesk_400Regular: require("../../assets/fonts/SpaceGrotesk_400Regular.ttf"),
-        SpaceGrotesk_500Medium: require("../../assets/fonts/SpaceGrotesk_500Medium.ttf"),
-        SpaceGrotesk_600SemiBold: require("../../assets/fonts/SpaceGrotesk_600SemiBold.ttf"),
-        SpaceGrotesk_700Bold: require("../../assets/fonts/SpaceGrotesk_700Bold.ttf"),
+        "SpaceGrotesk-Light": require("../../assets/fonts/SpaceGrotesk-Light.ttf"),
+        "SpaceGrotesk-Regular": require("../../assets/fonts/SpaceGrotesk-Regular.ttf"),
+        "SpaceGrotesk-Medium": require("../../assets/fonts/SpaceGrotesk-Medium.ttf"),
+        "SpaceGrotesk-SemiBold": require("../../assets/fonts/SpaceGrotesk-SemiBold.ttf"),
+        "SpaceGrotesk-Bold": require("../../assets/fonts/SpaceGrotesk-Bold.ttf"),
       }
     : {}
 
 /**
  * On iOS and Android, the fonts are embedded as part of the app binary
- * using the expo config plugin in `app.json`. See the project
- * [`app.json`](../../app.json) for the expo-fonts configuration. The assets
+ * using the expo config plugin in `app.config.ts`. See the project
+ * [`app.config.ts`](../../app.config.ts) for the expo-fonts configuration. The assets
  * are added via the `app/assets/fonts` folder. This config plugin
  * does NOT work for web, so we have to dynamically load the fonts via this hook.
  *
@@ -36,26 +44,11 @@ export const useCustomFonts = (): [boolean, Error | null] => {
 
 const fonts = {
   spaceGrotesk: {
-    light: Platform.select({
-      ios: "SpaceGrotesk-Light",
-      android: "SpaceGrotesk_300Light",
-    }),
-    normal: Platform.select({
-      ios: "SpaceGrotesk-Regular",
-      android: "SpaceGrotesk_400Regular",
-    }),
-    medium: Platform.select({
-      ios: "SpaceGrotesk-Medium",
-      android: "SpaceGrotesk_500Medium",
-    }),
-    semiBold: Platform.select({
-      ios: "SpaceGrotesk-SemiBold",
-      android: "SpaceGrotesk_600SemiBold",
-    }),
-    bold: Platform.select({
-      ios: "SpaceGrotesk-Bold",
-      android: "SpaceGrotesk_700Bold",
-    }),
+    light: "SpaceGrotesk-Light",
+    normal: "SpaceGrotesk-Regular",
+    medium: "SpaceGrotesk-Medium",
+    semiBold: "SpaceGrotesk-SemiBold",
+    bold: "SpaceGrotesk-Bold",
   },
   helveticaNeue: {
     // iOS only font.
