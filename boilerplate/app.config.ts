@@ -6,14 +6,14 @@ import path from "path"
  * Automatically discover all .ttf fonts under app/assets/fonts
  * so we never have to hardcode them.
  */
-function getFontFiles(): string[] {
-  const fontsDir = path.resolve(__dirname, "app/assets/fonts")
+function getFontPathsFromAssetsFolder(): string[] {
+  const fontsDir = path.resolve(__dirname, "assets/fonts")
   if (!fs.existsSync(fontsDir)) return []
 
   return fs
     .readdirSync(fontsDir)
     .filter((file) => file.endsWith(".ttf"))
-    .map((file) => `./app/assets/fonts/${file}`)
+    .map((file) => `./assets/fonts/${file}`)
 }
 
 /**
@@ -32,7 +32,8 @@ import "tsx/cjs"
  */
 module.exports = ({ config }: ConfigContext): Partial<ExpoConfig> => {
   const existingPlugins = config.plugins ?? []
-  const fonts = getFontFiles()
+  const fontPaths = getFontPathsFromAssetsFolder()
+
   return {
     ...config,
 
@@ -58,9 +59,10 @@ module.exports = ({ config }: ConfigContext): Partial<ExpoConfig> => {
       [
         "expo-font",
         {
-          fonts,
+          fonts: fontPaths,
         },
       ],
+      require("./plugins/withSplashScreen").withSplashScreen,
     ],
   }
 }

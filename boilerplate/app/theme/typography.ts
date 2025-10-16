@@ -4,13 +4,16 @@
 import { Platform } from "react-native"
 import { FontSource, useFonts } from "expo-font"
 
-export const customFontsToLoad: Record<string, FontSource> = {
-  SpaceGrotesk_300Light: require("../../assets/fonts/SpaceGrotesk_300Light.ttf"),
-  SpaceGrotesk_400Regular: require("../../assets/fonts/SpaceGrotesk_400Regular.ttf"),
-  SpaceGrotesk_500Medium: require("../../assets/fonts/SpaceGrotesk_500Medium.ttf"),
-  SpaceGrotesk_600SemiBold: require("../../assets/fonts/SpaceGrotesk_600SemiBold.ttf"),
-  SpaceGrotesk_700Bold: require("../../assets/fonts/SpaceGrotesk_700Bold.ttf"),
-}
+export const customFontsToLoad: Record<string, FontSource> =
+  Platform.OS === "web"
+    ? {
+        SpaceGrotesk_300Light: require("../../assets/fonts/SpaceGrotesk_300Light.ttf"),
+        SpaceGrotesk_400Regular: require("../../assets/fonts/SpaceGrotesk_400Regular.ttf"),
+        SpaceGrotesk_500Medium: require("../../assets/fonts/SpaceGrotesk_500Medium.ttf"),
+        SpaceGrotesk_600SemiBold: require("../../assets/fonts/SpaceGrotesk_600SemiBold.ttf"),
+        SpaceGrotesk_700Bold: require("../../assets/fonts/SpaceGrotesk_700Bold.ttf"),
+      }
+    : {}
 
 /**
  * On iOS and Android, the fonts are embedded as part of the app binary
@@ -33,11 +36,26 @@ export const useCustomFonts = (): [boolean, Error | null] => {
 
 const fonts = {
   spaceGrotesk: {
-    light: "SpaceGrotesk_300Light",
-    normal: "SpaceGrotesk_400Regular",
-    medium: "SpaceGrotesk_500Medium",
-    semiBold: "SpaceGrotesk_600SemiBold",
-    bold: "SpaceGrotesk_700Bold",
+    light: Platform.select({
+      ios: "SpaceGrotesk-Light",
+      android: "SpaceGrotesk_300Light",
+    }),
+    normal: Platform.select({
+      ios: "SpaceGrotesk-Regular",
+      android: "SpaceGrotesk_400Regular",
+    }),
+    medium: Platform.select({
+      ios: "SpaceGrotesk-Medium",
+      android: "SpaceGrotesk_500Medium",
+    }),
+    semiBold: Platform.select({
+      ios: "SpaceGrotesk-SemiBold",
+      android: "SpaceGrotesk_600SemiBold",
+    }),
+    bold: Platform.select({
+      ios: "SpaceGrotesk-Bold",
+      android: "SpaceGrotesk_700Bold",
+    }),
   },
   helveticaNeue: {
     // iOS only font.
