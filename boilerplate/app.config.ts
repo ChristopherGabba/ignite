@@ -3,7 +3,7 @@ import fs from "fs"
 import path from "path"
 
 /**
- * Automatically discover all .ttf fonts under app/assets/fonts
+ * Automatically discover all fonts under `assets/fonts`
  * so we never have to hardcode them.
  */
 function getFontPathsFromAssetsFolder(): string[] {
